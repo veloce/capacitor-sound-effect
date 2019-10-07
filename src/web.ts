@@ -3,9 +3,7 @@ import { SoundEffectPlugin } from './definitions';
 
 export class SoundEffectWeb extends WebPlugin implements SoundEffectPlugin {
 
-  private audioMap: {
-    [id: string]: HTMLAudioElement | undefined
-  }
+  private audioMap: { [id: string]: HTMLAudioElement | undefined } = {}
 
   constructor() {
     super({
