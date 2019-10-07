@@ -53,13 +53,13 @@ class SoundEffect : Plugin() {
           return
       }
 
-      val afd = audioMap[audioId]
-      if (afd === null) {
+      val aid = audioMap[audioId]
+      if (aid === null) {
         call.error("Audio asset not found")
         return
       }
 
-      soundPool.play(afd, 1f, 1f, 1, 0, 1f)
+      soundPool.play(aid, 1f, 1f, 1, 0, 1f)
       call.resolve()
     }
 }
