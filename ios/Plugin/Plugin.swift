@@ -1,12 +1,25 @@
 import Foundation
-import AudioToolbox
 import Capacitor
+import AVFoundation
 
 
 @objc(SoundEffect)
 public class SoundEffect: CAPPlugin {
     
-    var audioMap = [String : SystemSoundID]()
+    var audioMap = [String : AVAudioPlayer]()
+
+    override public func load() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(AVAudioSession.Category.ambient,
+                                    mode: AVAudioSession.Mode.default,
+                                    options: [])
+            try session.setPreferredIOBufferDuration(0.005)
+            try session.setActive(true)
+        } catch let error as NSError {
+            print("Failed to set the audio session: \(error.localizedDescription)")
+        }
+    }
     
     @objc func loadSound(_ call: CAPPluginCall) {
         
@@ -20,14 +33,20 @@ public class SoundEffect: CAPPlugin {
             return
         }
         
-        var soundID: SystemSoundID = 0
+        let player: AVAudioPlayer
         let basePath = Bundle.main.resourcePath ?? ""
         let fullPath = basePath + "/public/" + path
-        let pathUrl = NSURL(fileURLWithPath: fullPath)
+        let pathUrl = URL(fileURLWithPath: fullPath)
 
-        AudioServicesCreateSystemSoundID(pathUrl, &soundID)
-        
-        audioMap[audioId] = soundID
+        do {
+            player = try AVAudioPlayer(contentsOf: pathUrl)
+            player.volume = 0.8
+            player.prepareToPlay()
+            audioMap[audioId] = player
+        } catch {
+            call.reject("Could not load file")
+            return
+        }
 
         call.resolve()
     }
@@ -38,12 +57,12 @@ public class SoundEffect: CAPPlugin {
             return
         }
         
-        guard let audio = audioMap[audioId] else {
+        guard let player = audioMap[audioId] else {
             call.reject("Audio not found")
             return
         }
         
-        AudioServicesPlaySystemSound(audio)
+        player.play()
         
         call.resolve()
     }
