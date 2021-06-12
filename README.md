@@ -11,9 +11,43 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`loadSound(...)`](#loadsound)
+* [`play(...)`](#play)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### loadSound(...)
+
+```typescript
+loadSound(options: { id: string; path: string; }) => any
+```
+
+| Param         | Type                                       |
+| ------------- | ------------------------------------------ |
+| **`options`** | <code>{ id: string; path: string; }</code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### play(...)
+
+```typescript
+play(options: { id: string; }) => any
+```
+
+| Param         | Type                         |
+| ------------- | ---------------------------- |
+| **`options`** | <code>{ id: string; }</code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
 </docgen-api>

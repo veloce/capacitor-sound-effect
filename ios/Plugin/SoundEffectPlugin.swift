@@ -7,12 +7,42 @@ import Capacitor
  */
 @objc(SoundEffectPlugin)
 public class SoundEffectPlugin: CAPPlugin {
+    
+
     private let implementation = SoundEffect()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    @objc func loadSound(_ call: CAPPluginCall) {
+        guard let path = call.options["path"] as? String else {
+            call.reject("Must provide a path")
+            return
+        }
+        
+        guard let audioId = call.options["id"] as? String else {
+            call.reject("Must provide an id")
+            return
+        }
+
+        do {
+            try implementation.loadSound(audioId: audioId, path: path)
+        } catch {
+            call.reject("Could not load file")
+            return
+        }
     }
+    
+    @objc func play(_ call: CAPPluginCall) {
+        guard let audioId = call.options["id"] as? String else {
+            call.reject("Must provide an id")
+            return
+        }
+            
+        do {
+            try implementation.play(audioId)
+        } catch {
+            call.reject("Audio not found")
+        }
+        
+        call.resolve()
+    }
+
 }

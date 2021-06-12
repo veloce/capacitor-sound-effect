@@ -1,3 +1,4 @@
 export interface SoundEffectPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+  loadSound(options: { id: string, path: string }): Promise<void>
+  play(options: { id: string }): Promise<void>
 }
